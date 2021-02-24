@@ -30,3 +30,9 @@ export interface WakaTimeStatsLanguage {
   /* integer: minutes portion of coding activity for this language */
   minutes: number;
 }
+
+export type WakaTimeStatsRange =
+  | "last_7_days"
+  | "last_30_days"
+  | "last_6_months"
+  | "last_year";

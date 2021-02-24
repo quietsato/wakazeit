@@ -1,7 +1,15 @@
 import Head from "next/head";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
+
+import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime";
+import { fetchWakaTimeUserStats } from "libs/wakatime";
+
+import config from "config";
 import styles from "../styles/Home.module.css";
 
-export default function Home({ wakatimeStats }) {
+export default function Home({
+  wakaTimeStatsList,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <div className={styles.container}>
       <Head>
@@ -14,7 +22,14 @@ export default function Home({ wakatimeStats }) {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p>{wakatimeStats}</p>
+        {wakaTimeStatsList.map((stats) => (
+          <p key={stats.username}>
+            <ul>
+              <li>{stats.username}</li>
+              <li>{stats.languages[0].name}</li>
+            </ul>
+          </p>
+        ))}
       </main>
 
       <footer className={styles.footer}>
@@ -31,10 +46,28 @@ export default function Home({ wakatimeStats }) {
   );
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async (context) => {
+  const fetchDelay = 500; // ms
+
+  // read config
+  const wakaTimeUsernames = config.usernames;
+  const wakaTimeStatsRange = config.api.range as WakaTimeStatsRange;
+
+  const fetchWakaTimeStats = wakaTimeUsernames.map((username, i) => {
+    return new Promise<WakaTimeStats>(async (resolve, reject) =>
+      setTimeout(() => {
+        fetchWakaTimeUserStats(username, wakaTimeStatsRange)
+          .then(resolve)
+          .catch(reject);
+      }, fetchDelay * i)
+    );
+  });
+
+  const statsList: WakaTimeStats[] = await Promise.all(fetchWakaTimeStats);
+  console.log(statsList);
   return {
     props: {
-      wakatimeStats: new Date().toLocaleTimeString(),
+      wakaTimeStatsList: statsList,
     },
   };
-}
+};
