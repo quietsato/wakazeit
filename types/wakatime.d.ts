@@ -1,3 +1,8 @@
+/**
+ * WakaTime API Documentation
+ * https://wakatime.com/developers#stats
+ */
+
 export interface WakaTimeStats {
   /* float: total coding activity as seconds for the given range of time */
   total_seconds: number;
