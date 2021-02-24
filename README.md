@@ -1,5 +1,19 @@
 # wakazeit
+
 Wakatime dashboard
+
+## Configurations
+
+The project configuration file is `<project-root>/config.json`
+
+```js
+{
+    /* WakaTime user names (exclude @) */
+    "usernames": [
+        "quietsato"
+    ]
+}
+```
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
