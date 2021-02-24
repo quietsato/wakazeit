@@ -9,20 +9,20 @@ export interface WakaTimeStats {
   /* float: average coding activity per day as seconds for the given range of time */
   daily_average: number;
   /* WakaTimeStatsLanguage */
-  languages: [WakaTimeStatsLanguage];
+  languages: WakaTimeStatsLanguage[];
   /* string: start of this time range as ISO 8601 UTC datetime */
   start: string;
   /* string: end of this time range as ISO 8601 UTC datetime */
   end: string;
   /* string: public username for this user */
   username: string;
+  /* string: unique id of this user*/
+  user_id: string;
 }
 
 export interface WakaTimeStatsLanguage {
   /* string: language name */
   name: string;
-  /* float: total coding activity spent in this language as seconds */
-  total_seconds: number;
   /*float: percent of time spent in this language */
   percent: number;
   /* integer: hours portion of coding activity for this language */

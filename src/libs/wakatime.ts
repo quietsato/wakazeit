@@ -1,11 +1,5 @@
 import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime";
-
-/**
- * If WakaTime API url is changed, please modify this function.
- */
-function generateWakaTimeApiUrl(username: string, range: WakaTimeStatsRange) {
-  return `https://wakatime.com/api/v1/users/${username}/stats/${range}`;
-}
+import { generateWakaTimeApiUrl } from "./urls";
 
 export function fetchWakaTimeUserStats(
   username: string,

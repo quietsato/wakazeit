@@ -6,10 +6,30 @@ import { fetchWakaTimeUserStats } from "libs/wakatime";
 
 import config from "config";
 import styles from "../styles/Home.module.css";
+import UserStatsCard, { TimeDisplayMode } from "components/user-stats-card";
+import { useState } from "react";
 
 export default function Home({
   wakaTimeStatsList,
+  buildTime,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const [timeDisplayMode, setTimeDisplayMode] = useState<TimeDisplayMode>(
+    "total"
+  );
+
+  const displayModeToggleButtonClicked = () => {
+    setTimeDisplayMode((timeDisplayMode) => {
+      switch (timeDisplayMode) {
+        case "daily-average":
+          return "total";
+        case "total":
+          return "daily-average";
+        default:
+          return "total";
+      }
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -17,36 +37,50 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <header className={styles.header}>
+        <div className={styles.siteTitle}>WakaZeit</div>
+        <button
+          className={styles.displayModeToggleButton}
+          onClick={displayModeToggleButtonClicked}
+        >
+          {getDisplayModeToggleButtonText(timeDisplayMode)}
+        </button>
+      </header>
 
-        {wakaTimeStatsList.map((stats) => (
-          <p key={stats.username}>
-            <ul>
-              <li>{stats.username}</li>
-              <li>{stats.languages[0].name}</li>
-            </ul>
-          </p>
-        ))}
+      <main className={styles.main}>
+        <div className={styles.statsList}>
+          {wakaTimeStatsList.map((stats: WakaTimeStats) => (
+            <div className={styles.card} key={stats.username}>
+              <UserStatsCard
+                stats={stats}
+                timeDisplayMode={timeDisplayMode}
+                maxLanguages={5}
+              />
+            </div>
+          ))}
+        </div>
       </main>
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
+        <div>Build Date: {buildTime}</div>
+        <div>&copy; 2021 quietsato</div>
       </footer>
     </div>
   );
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+function getDisplayModeToggleButtonText(mode: TimeDisplayMode) {
+  switch (mode) {
+    case "daily-average":
+      return "Daily Average";
+    case "total":
+      return "Last 7 Days";
+    default:
+      return "";
+  }
+}
+
+export const getStaticProps: GetStaticProps = async () => {
   const fetchDelay = 500; // ms
 
   // read config
@@ -63,11 +97,18 @@ export const getStaticProps: GetStaticProps = async (context) => {
     );
   });
 
-  const statsList: WakaTimeStats[] = await Promise.all(fetchWakaTimeStats);
-  console.log(statsList);
+  const fetchedStatsList: WakaTimeStats[] = await Promise.all(
+    fetchWakaTimeStats
+  );
+
+  const statsList = fetchedStatsList.sort(
+    (a, b) => b.total_seconds - a.total_seconds
+  );
+
   return {
     props: {
       wakaTimeStatsList: statsList,
+      buildTime: new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }),
     },
   };
 };
