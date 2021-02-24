@@ -8,6 +8,14 @@ The project configuration file is `<project-root>/config.json`
 
 ```js
 {
+    /* WakaTime API Configuration */
+    "api": {
+        /*
+            Specify range of stats
+                available options: https://wakatime.com/developers#stats
+        */
+        "range": "last_7_days"
+    },
     /* WakaTime user names (exclude @) */
     "usernames": [
         "quietsato"
