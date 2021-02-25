@@ -45,9 +45,10 @@
 .statsList {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, 450px);
+  justify-content: center;
   align-items: center;
-  grid-gap: 1.5rem;
+  gap: 1.5rem;
 }
 
 .footer {
