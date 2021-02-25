@@ -2,5 +2,8 @@
   "api": {
     "range": "last_7_days"
   },
-  "usernames": ["quietsato"]
+  "usernames": [
+    "quietsato",
+    "makotia"
+  ]
 }
