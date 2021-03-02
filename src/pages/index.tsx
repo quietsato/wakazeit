@@ -110,5 +110,6 @@ export const getStaticProps: GetStaticProps = async () => {
       wakaTimeStatsList: statsList,
       buildTime: new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }),
     },
+    revalidate: 5 * 60 // Every 5 minutes
   };
 };
