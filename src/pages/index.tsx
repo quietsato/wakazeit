@@ -1,34 +1,33 @@
-import Head from "next/head";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import React, { useState } from "react"
 
-import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime";
-import { fetchWakaTimeUserStats } from "libs/wakatime";
+import UserStatsCard, { TimeDisplayMode } from "components/user-stats-card"
+import config from "config"
+import { fetchWakaTimeUserStats } from "libs/wakatime"
+import { GetStaticProps, InferGetStaticPropsType } from "next"
+import Head from "next/head"
 
-import config from "config";
-import styles from "../styles/Home.module.css";
-import UserStatsCard, { TimeDisplayMode } from "components/user-stats-card";
-import { useState } from "react";
+import styles from "../styles/Home.module.css"
+import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime"
 
 export default function Home({
   wakaTimeStatsList,
   buildTime,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  const [timeDisplayMode, setTimeDisplayMode] = useState<TimeDisplayMode>(
-    "total"
-  );
+}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
+  const [timeDisplayMode, setTimeDisplayMode] =
+    useState<TimeDisplayMode>("total")
 
   const displayModeToggleButtonClicked = () => {
     setTimeDisplayMode((timeDisplayMode) => {
       switch (timeDisplayMode) {
         case "daily-average":
-          return "total";
+          return "total"
         case "total":
-          return "daily-average";
+          return "daily-average"
         default:
-          return "total";
+          return "total"
       }
-    });
-  };
+    })
+  }
 
   return (
     <div className={styles.container}>
@@ -41,8 +40,7 @@ export default function Home({
         <div className={styles.siteTitle}>WakaZeit</div>
         <button
           className={styles.displayModeToggleButton}
-          onClick={displayModeToggleButtonClicked}
-        >
+          onClick={displayModeToggleButtonClicked}>
           {getDisplayModeToggleButtonText(timeDisplayMode)}
         </button>
       </header>
@@ -66,50 +64,50 @@ export default function Home({
         <div>&copy; 2021 quietsato</div>
       </footer>
     </div>
-  );
+  )
 }
 
 function getDisplayModeToggleButtonText(mode: TimeDisplayMode) {
   switch (mode) {
     case "daily-average":
-      return "Daily Average";
+      return "Daily Average"
     case "total":
-      return "Last 7 Days";
+      return "Last 7 Days"
     default:
-      return "";
+      return ""
   }
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const fetchDelay = 500; // ms
+  const fetchDelay = 500 // ms
 
   // read config
-  const wakaTimeUsernames = config.usernames;
-  const wakaTimeStatsRange = config.api.range as WakaTimeStatsRange;
+  const wakaTimeUsernames = config.usernames
+  const wakaTimeStatsRange = config.api.range as WakaTimeStatsRange
 
   const fetchWakaTimeStats = wakaTimeUsernames.map((username, i) => {
-    return new Promise<WakaTimeStats>(async (resolve, reject) =>
+    return new Promise<WakaTimeStats>((resolve, reject) =>
       setTimeout(() => {
         fetchWakaTimeUserStats(username, wakaTimeStatsRange)
           .then(resolve)
-          .catch(reject);
+          .catch(reject)
       }, fetchDelay * i)
-    );
-  });
+    )
+  })
 
   const fetchedStatsList: WakaTimeStats[] = await Promise.all(
     fetchWakaTimeStats
-  );
+  )
 
-  const statsList = fetchedStatsList.sort(
+  const statsList = [...fetchedStatsList].sort(
     (a, b) => b.total_seconds - a.total_seconds
-  );
+  )
 
   return {
     props: {
       wakaTimeStatsList: statsList,
       buildTime: new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }),
     },
-    revalidate: 5 * 60 // Every 5 minutes
-  };
-};
+    revalidate: 5 * 60, // Every 5 minutes
+  }
+}

@@ -1,7 +1,11 @@
-import "../styles/globals.css";
+import React, { VFC } from "react"
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+import type { AppProps } from "next/app"
+
+import "../styles/globals.css"
+
+export const MyApp: VFC<AppProps> = ({ Component, pageProps }) => {
+  return <Component {...pageProps} />
 }
 
-export default MyApp;
+export default MyApp

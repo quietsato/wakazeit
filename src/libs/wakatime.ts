@@ -1,18 +1,18 @@
-import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime";
-import { generateWakaTimeApiUrl } from "./urls";
+import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime"
+import { generateWakaTimeApiUrl } from "./urls"
 
 export function fetchWakaTimeUserStats(
   username: string,
   range: WakaTimeStatsRange
 ): Promise<WakaTimeStats> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      const apiUrl = generateWakaTimeApiUrl(username, range);
+      const apiUrl = generateWakaTimeApiUrl(username, range)
       const apiKeyEncoded = (() => {
-        const apiKey = process.env.WAKATIME_APIKEY;
-        if (apiKey == null) throw "env: WAKATIME_APIKEY isn't set.";
-        return Buffer.from(apiKey, "binary").toString("base64");
-      })();
+        const apiKey = process.env.WAKATIME_APIKEY
+        if (apiKey == null) throw "env: WAKATIME_APIKEY isn't set."
+        return Buffer.from(apiKey, "binary").toString("base64")
+      })()
 
       fetch(apiUrl, {
         headers: {
@@ -23,17 +23,17 @@ export function fetchWakaTimeUserStats(
           response
             .json()
             .then((json) => {
-              resolve(json.data as WakaTimeStats);
+              resolve(json.data as WakaTimeStats)
             })
-            .catch((error) =>
+            .catch((error: unknown) =>
               reject(`Failed to parse WakaTime API response json. ${error}`)
-            );
+            )
         })
-        .catch((error) => {
-          reject(error);
-        });
+        .catch((error: unknown) => {
+          reject(error)
+        })
     } catch (exception) {
-      reject(exception);
+      reject(exception)
     }
-  });
+  })
 }

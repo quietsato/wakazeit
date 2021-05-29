@@ -1,8 +1,8 @@
-import { WakaTimeStatsRange } from "./wakatime";
+import { WakaTimeStatsRange } from "./wakatime"
 
 export interface Config {
   api: {
-    range: WakaTimeStatsRange;
-  };
-  usernames: string[];
+    range: WakaTimeStatsRange
+  }
+  usernames: string[]
 }
