@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tests: ['lint']
+        tests: ["lint"]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
