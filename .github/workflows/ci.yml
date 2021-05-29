@@ -1,5 +1,9 @@
 name: CI
 
+
+env:
+  WAKATIME_APIKEY: ${{secrets.WAKATIME_APIKEY}}
+
 on:
   push:
     branches:
@@ -56,5 +60,5 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-      - name: Lint
+      - name: Run ${{ matrix.tests }}
         run: yarn ${{ matrix.tests }}
