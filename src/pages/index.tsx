@@ -1,18 +1,20 @@
-import Head from "next/head";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import React,{ useState } from "react";
 
-import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime";
-import { fetchWakaTimeUserStats } from "libs/wakatime";
-
-import config from "config";
-import styles from "../styles/Home.module.css";
 import UserStatsCard, { TimeDisplayMode } from "components/user-stats-card";
-import { useState } from "react";
+import config from "config";
+import { fetchWakaTimeUserStats } from "libs/wakatime";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
+import Head from "next/head";
+
+import styles from "../styles/Home.module.css";
+import { WakaTimeStats, WakaTimeStatsRange } from "../types/wakatime";
+
+
 
 export default function Home({
   wakaTimeStatsList,
   buildTime,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
   const [timeDisplayMode, setTimeDisplayMode] = useState<TimeDisplayMode>(
     "total"
   );
@@ -88,7 +90,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const wakaTimeStatsRange = config.api.range as WakaTimeStatsRange;
 
   const fetchWakaTimeStats = wakaTimeUsernames.map((username, i) => {
-    return new Promise<WakaTimeStats>(async (resolve, reject) =>
+    return new Promise<WakaTimeStats>((resolve, reject) =>
       setTimeout(() => {
         fetchWakaTimeUserStats(username, wakaTimeStatsRange)
           .then(resolve)
@@ -101,7 +103,7 @@ export const getStaticProps: GetStaticProps = async () => {
     fetchWakaTimeStats
   );
 
-  const statsList = fetchedStatsList.sort(
+  const statsList = [...fetchedStatsList].sort(
     (a, b) => b.total_seconds - a.total_seconds
   );
 

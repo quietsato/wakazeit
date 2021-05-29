@@ -5,7 +5,7 @@ export function fetchWakaTimeUserStats(
   username: string,
   range: WakaTimeStatsRange
 ): Promise<WakaTimeStats> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
       const apiUrl = generateWakaTimeApiUrl(username, range);
       const apiKeyEncoded = (() => {
@@ -25,11 +25,11 @@ export function fetchWakaTimeUserStats(
             .then((json) => {
               resolve(json.data as WakaTimeStats);
             })
-            .catch((error) =>
+            .catch((error: unknown) =>
               reject(`Failed to parse WakaTime API response json. ${error}`)
             );
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           reject(error);
         });
     } catch (exception) {

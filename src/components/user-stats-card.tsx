@@ -1,29 +1,29 @@
-import React from "react";
-import Link from "next/link";
-import LazyLoad from "react-lazyload";
-import colors from "github-colors/colors.json";
+import React,{VFC} from "react";
 
-import { WakaTimeStats } from "types/wakatime";
+import colors from "github-colors/colors.json";
 import {
   generateWakaTimeUserAvatarLink,
   generateWakaTimeUserPageLink,
 } from "libs/urls";
+import Link from "next/link";
+import LazyLoad from "react-lazyload";
+import { WakaTimeStats } from "types/wakatime";
 
 import styles from "../styles/user-stats-card.module.css";
 
 export type TimeDisplayMode = "total" | "daily-average";
 
-type Props = {
+interface Props {
   stats: WakaTimeStats;
   timeDisplayMode: TimeDisplayMode;
   maxLanguages: number;
-};
+}
 
-export default function UserStatsCard({
+export const UserStatsCard: VFC<Props> = ({
   stats,
   timeDisplayMode,
   maxLanguages,
-}: Props) {
+}) => {
   return (
     <div className={styles.root}>
       <div className={styles.layout}>
@@ -33,6 +33,7 @@ export default function UserStatsCard({
               <img
                 src={generateWakaTimeUserAvatarLink(stats.user_id)}
                 className={styles.avatar}
+                alt={stats.username}
               />
             </LazyLoad>
           </div>
@@ -122,3 +123,5 @@ function getDisplaySeconds(
       return stats.total_seconds;
   }
 }
+
+export default UserStatsCard
