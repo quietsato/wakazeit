@@ -1,22 +1,22 @@
-import React,{VFC} from "react";
+import React, { VFC } from "react"
 
-import colors from "github-colors/colors.json";
+import colors from "github-colors/colors.json"
 import {
   generateWakaTimeUserAvatarLink,
   generateWakaTimeUserPageLink,
-} from "libs/urls";
-import Link from "next/link";
-import LazyLoad from "react-lazyload";
-import { WakaTimeStats } from "types/wakatime";
+} from "libs/urls"
+import Link from "next/link"
+import LazyLoad from "react-lazyload"
+import { WakaTimeStats } from "types/wakatime"
 
-import styles from "../styles/user-stats-card.module.css";
+import styles from "../styles/user-stats-card.module.css"
 
-export type TimeDisplayMode = "total" | "daily-average";
+export type TimeDisplayMode = "total" | "daily-average"
 
 interface Props {
-  stats: WakaTimeStats;
-  timeDisplayMode: TimeDisplayMode;
-  maxLanguages: number;
+  stats: WakaTimeStats
+  timeDisplayMode: TimeDisplayMode
+  maxLanguages: number
 }
 
 export const UserStatsCard: VFC<Props> = ({
@@ -68,19 +68,19 @@ export const UserStatsCard: VFC<Props> = ({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-function displayTime(seconds: number);
-function displayTime(hour: number, minute: number);
+function displayTime(seconds: number)
+function displayTime(hour: number, minute: number)
 function displayTime(x: number, y?: number) {
   let h = 0,
-    m = 0;
+    m = 0
   if (typeof y == "number") {
-    h = x;
-    m = y;
+    h = x
+    m = y
   } else {
-    [h, m] = calculateHourAndMinute(x);
+    ;[h, m] = calculateHourAndMinute(x)
   }
 
   return (
@@ -90,23 +90,23 @@ function displayTime(x: number, y?: number) {
       <span className={styles.timeFigure}>{m.toString().padStart(2, "0")}</span>
       <span className={styles.timeUnit}>m</span>
     </span>
-  );
+  )
 }
 
 function calculateHourAndMinute(seconds: number): [number, number] {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return [h, m];
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  return [h, m]
 }
 
 function getColorOfLanguage(language: string): string {
-  const fallbackColor = "#ededed";
+  const fallbackColor = "#ededed"
 
-  const colorData = colors[language];
+  const colorData = colors[language]
   if (colorData == null) {
-    return fallbackColor;
+    return fallbackColor
   } else {
-    return colorData.color ?? fallbackColor;
+    return colorData.color ?? fallbackColor
   }
 }
 
@@ -116,11 +116,11 @@ function getDisplaySeconds(
 ) {
   switch (timeDisplayMode) {
     case "total":
-      return stats.total_seconds;
+      return stats.total_seconds
     case "daily-average":
-      return stats.daily_average;
+      return stats.daily_average
     default:
-      return stats.total_seconds;
+      return stats.total_seconds
   }
 }
 

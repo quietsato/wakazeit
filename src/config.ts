@@ -1,5 +1,5 @@
-import { Config } from "types/config";
+import { Config } from "types/config"
 
-import config from "../config.json";
+import config from "../config.json"
 
-export default config as Config;
+export default config as Config
