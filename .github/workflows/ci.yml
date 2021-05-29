@@ -1,6 +1,5 @@
 name: CI
 
-
 env:
   WAKATIME_APIKEY: ${{secrets.WAKATIME_APIKEY}}
 
